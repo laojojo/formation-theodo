@@ -18,7 +18,7 @@ import cv2
 def grabcut(imagePath):
     (path, imageName) = os.path.split(imagePath)
     (shortname, extension) = os.path.splitext(imageName)
-    src = cv2.imread(imagePath, 1)
+    src = cv2.imread(imagePath, cv2.IMREAD_UNCHANGED)
     tmp = cv2.cvtColor(src, cv2.COLOR_BGR2GRAY)
     _,alpha = cv2.threshold(tmp,254,255,cv2.THRESH_BINARY_INV)
     b, g, r = cv2.split(src)
@@ -30,7 +30,7 @@ def grabcut(imagePath):
 
 
 # lecture de la video
-cap = cv2.VideoCapture('Users/jordan/Documents/Jordan/personal-projects/formation-theodo/opencv-sample-video.avi')
+cap = cv2.VideoCapture('/Users/jordan/Documents/Jordan/personal-projects/formation-theodo/opencv-sample-video.avi')
 
 # creation de l'objet qui permet de supprimer l'arriere plan
 fgbg = cv2.createBackgroundSubtractorMOG2(history=200, varThreshold=128, detectShadows=False)
@@ -43,7 +43,7 @@ alpha = 0.5
 arr = 0
 
 
-while(1):
+while(1 & cap.isOpened()):
     # Capture frame-by-frame
     ret, frame = cap.read()
     cv2.imwrite('/Users/jordan/Documents/Jordan/personal-projects/formation-theodo/results/frame.png', frame)
@@ -64,9 +64,12 @@ while(1):
     # Display the resulting frame
     cv2.imwrite('/Users/jordan/Documents/Jordan/personal-projects/formation-theodo/results/heatmap.png', output)
     cv2.imshow('heatmap', output)
-    if cv2.waitKey(25) & 0xFF == ord('q'):
+    if cv2.waitKey(5) & 0xFF == ord('q'):
+        cap.release()
+        cv2.destroyAllWindows()
         break
         
 # When everything done, release the capture
 cap.release()
 cv2.destroyAllWindows()
+cv2.waitKey(1)
