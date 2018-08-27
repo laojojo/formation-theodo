@@ -5,8 +5,6 @@ Created on Thu Jun 22 16:13:53 2017
 @author: jorlao
 """
 
-import numpy as np
-import sys
 import os
 import cv2
 
@@ -43,7 +41,7 @@ alpha = 0.5
 arr = 0
 
 
-while(1 & cap.isOpened()):
+while(cap.isOpened()):
     # Capture frame-by-frame
     ret, frame = cap.read()
     cv2.imwrite('/Users/jordan/Documents/Jordan/personal-projects/formation-theodo/results/frame.png', frame)
