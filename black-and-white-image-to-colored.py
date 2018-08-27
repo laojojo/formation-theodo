@@ -18,11 +18,8 @@ def blackAndWhiteImageToColored(image):
     rowNumber = image.shape[0]
     columnNumber = image.shape[1]
     flattenImage = image.flatten()
+    coloredImage = np.array((flattenImage, flattenImage, flattenImage)).T
     
-    vfunc = np.vectorize(flattenImage)
-    return vfunc(flattenImage)
-    
-#    coloredImage = np.zeros((rowNumber, columnNumber, 3), dtype=np.uint8)
-
+    return np.reshape(coloredImage, (rowNumber, columnNumber, 3))
 
 print(blackAndWhiteImageToColored(testFgmask))

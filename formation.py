@@ -5,6 +5,7 @@ Created on Thu Jun 22 16:13:53 2017
 @author: jorlao
 """
 
+import numpy as np
 import os
 import cv2
 
@@ -35,6 +36,14 @@ def applyCustomColorMap(im_gray):
 
     return im_color;
 
+def blackAndWhiteImageToColored(image):
+    rowNumber = image.shape[0]
+    columnNumber = image.shape[1]
+    flattenImage = image.flatten()
+    coloredImage = np.array((flattenImage, flattenImage, flattenImage)).T
+
+    return np.reshape(coloredImage, (rowNumber, columnNumber, 3))
+
 # lecture de la video
 cap = cv2.VideoCapture('/Users/jordan/Documents/Jordan/personal-projects/formation-theodo/opencv-sample-video.avi')
 
@@ -59,9 +68,8 @@ while(cap.isOpened()):
     cv2.imwrite('/Users/jordan/Documents/Jordan/personal-projects/formation-theodo/results/fgmask.png', fgmask)
     
     arr = arr + fgmask
-    print(arr)
     
-    arrayReformated = np.reshape(np.array([arr, arr, arr]), (576, 768, 3))
+    arrayReformated = blackAndWhiteImageToColored(arr)
     heat = applyCustomColorMap(arrayReformated)
     cv2.imwrite('/Users/jordan/Documents/Jordan/personal-projects/formation-theodo/results/heat.png', heat)
     path = grabcut('/Users/jordan/Documents/Jordan/personal-projects/formation-theodo/results/heat.png')
