@@ -14,6 +14,7 @@ import cv2
 # Alpha est le coefficient de transparence. un objet est totalement opaque si la valeur alpha est au minimum (0)
 # threshold avec THRESH_BINARY met a partir de 254 inclus tous les octets en blanc (255)
 
+
 def grabcut(imagePath):
     (path, imageName) = os.path.split(imagePath)
     (shortname, extension) = os.path.splitext(imageName)
@@ -32,17 +33,17 @@ def applyCustomColorMap(im_gray):
     
     for pixel in range(1, 128):
         ## Red
-        humanFlowColormap[pixel, 0, 2] = 2 * pixel
-        
-        ## Green
-        humanFlowColormap[pixel, 0, 1] = 255
-        
-    for pixel in range(128, 256):
-        ## Red
         humanFlowColormap[pixel, 0, 2] = 255
         
         ## Green
-        humanFlowColormap[pixel, 0, 1] = 255 - 2 * (pixel - 128)
+        humanFlowColormap[pixel, 0, 1] = 2 * pixel
+        
+    for pixel in range(128, 256):
+        ## Red
+        humanFlowColormap[pixel, 0, 2] = 255 - 2 * (pixel - 128)
+        
+        ## Green
+        humanFlowColormap[pixel, 0, 1] = 255
         
     ## Blue
     humanFlowColormap[:, 0, 0] = 0
@@ -79,34 +80,38 @@ isFirstIteration = True
 while(cap.isOpened()):
     # Capture frame-by-frame
     ret, frame = cap.read()
-    cv2.imwrite('/Users/jordan/Documents/Jordan/personal-projects/formation-theodo/results/frame.png', frame)
-    # Calcul du masque
-
-    fgmask = fgbg.apply(frame, None, 0.01)
-    cv2.imwrite('/Users/jordan/Documents/Jordan/personal-projects/formation-theodo/results/fgmask.png', fgmask)
+    print(ret)
+    if ret == True:
+        cv2.imwrite('/Users/jordan/Documents/Jordan/personal-projects/formation-theodo/results/frame.png', frame)
+        # Calcul du masque
     
-    if isFirstIteration:
-        isFirstIteration = False
-        continue
-    
-    maskTrace = maskTrace + fgmask
-    arrayReformated = blackAndWhiteImageToColored(maskTrace)
-    heat = applyCustomColorMap(arrayReformated)
-    cv2.imwrite('/Users/jordan/Documents/Jordan/personal-projects/formation-theodo/results/maskTrace.png', maskTrace)
-    
-    cv2.imwrite('/Users/jordan/Documents/Jordan/personal-projects/formation-theodo/results/heat.png', heat)
-    path = grabcut('/Users/jordan/Documents/Jordan/personal-projects/formation-theodo/results/heat.png')
-    heat_cut = cv2.imread(path)
-    # resultat
-    output = frame.copy()
-    
-    cv2.addWeighted(heat_cut, alpha, output, 1 - alpha, 0, output)
-    # Display the resulting frame
-    cv2.imwrite('/Users/jordan/Documents/Jordan/personal-projects/formation-theodo/results/heatmap.png', output)
-    cv2.imshow('heatmap', output)
-    if cv2.waitKey(5) & 0xFF == ord('q'):
-        cap.release()
-        cv2.destroyAllWindows()
+        fgmask = fgbg.apply(frame, None, 0.01)
+        cv2.imwrite('/Users/jordan/Documents/Jordan/personal-projects/formation-theodo/results/fgmask.png', fgmask)
+        
+        if isFirstIteration:
+            isFirstIteration = False
+            continue
+        
+        maskTrace = maskTrace + fgmask
+        arrayReformated = blackAndWhiteImageToColored(maskTrace)
+        heat = applyCustomColorMap(arrayReformated)
+        cv2.imwrite('/Users/jordan/Documents/Jordan/personal-projects/formation-theodo/results/maskTrace.png', maskTrace)
+        
+        cv2.imwrite('/Users/jordan/Documents/Jordan/personal-projects/formation-theodo/results/heat.png', heat)
+        path = grabcut('/Users/jordan/Documents/Jordan/personal-projects/formation-theodo/results/heat.png')
+        heat_cut = cv2.imread(path)
+        # resultat
+        output = frame.copy()
+        
+        cv2.addWeighted(heat_cut, alpha, output, 1 - alpha, 0, output)
+        # Display the resulting frame
+        cv2.imwrite('/Users/jordan/Documents/Jordan/personal-projects/formation-theodo/results/heatmap.png', output)
+        cv2.imshow('heatmap', output)
+        if ((cv2.waitKey(5) & 0xFF == ord('q'))):
+            cap.release()
+            cv2.destroyAllWindows()
+            break
+    else:
         break
         
 # When everything done, release the capture
