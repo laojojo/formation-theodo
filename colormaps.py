@@ -7,7 +7,7 @@ Created on Tue Aug 28 13:52:51 2018
 """
 
 import numpy as np
-import cv2
+from utils_colormap import displayColormap
 
 colormap1 = np.zeros((256, 1, 3), dtype=np.uint8)
 ## Red
@@ -19,65 +19,103 @@ colormap1[:, 0, 1] = [255,255,255,255,255,255,255,255,255,255,255,255,255,255,25
 ## Blue
 colormap1[:, 0, 0] = [195,195,195,195,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,253,251,249,247,245,242,241,238,237,235,233,231,229,227,225,223,221,219,217,215,213,211,209,207,205,203,201,199,197,195,193,191,189,187,185,183,181,179,177,175,173,171,169,167,165,163,161,159,157,155,153,151,149,147,145,143,141,138,136,134,132,131,129,126,125,122,121,118,116,115,113,111,109,107,105,102,100,98,97,94,93,91,89,87,84,83,81,79,77,75,73,70,68,66,64,63,61,59,57,54,52,51,49,47,44,42,40,39,37,34,33,31,29,27,25,22,20,18,17,14,13,11,9,6,4,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 
-############################################################
-humanFlowColormapTest = np.zeros((256, 1, 3), dtype=np.uint8)
+######################### Reversed ####################################
+humanFlowColormapReversed = np.zeros((256, 1, 3), dtype=np.uint8)
 
 for pixel in range(1, 128):
     ## Red
-    humanFlowColormapTest[pixel, 0, 2] = 2 * pixel
+    humanFlowColormapReversed[pixel, 0, 2] = 2 * pixel
+
+    ## Green
+    humanFlowColormapReversed[pixel, 0, 1] = 255
+
+for pixel in range(128, 256):
+    ## Red
+    humanFlowColormapReversed[pixel, 0, 2] = 255
+
+    ## Green
+    humanFlowColormapReversed[pixel, 0, 1] = 255 - 2 * (pixel - 128)
+
+## Blue
+humanFlowColormapReversed[:, 0, 0] = 0
+
+humanFlowColormapReversed[0, 0, :] = 255
+#############################################################
+
+########################### Uniform colors ##################################
+humanFlowColormapUniform = np.zeros((256, 1, 3), dtype=np.uint8)
+
+for pixel in range(1, 128):
+    ## Red
+    humanFlowColormapUniform[pixel, 0, 2] = 255
     
     ## Green
-    humanFlowColormapTest[pixel, 0, 1] = 255
+    humanFlowColormapUniform[pixel, 0, 1] = 2 * pixel
     
 for pixel in range(128, 256):
     ## Red
-    humanFlowColormapTest[pixel, 0, 2] = 255
+    humanFlowColormapUniform[pixel, 0, 2] = 255 - 2 * (pixel - 128)
     
     ## Green
-    humanFlowColormapTest[pixel, 0, 1] = 255 - 2 * (pixel - 128)
+    humanFlowColormapUniform[pixel, 0, 1] = 255
     
 ## Blue
-humanFlowColormapTest[:, 0, 0] = 0
+humanFlowColormapUniform[:, 0, 0] = 0
 
-humanFlowColormapTest[0, 0, :] = 255
-############################################################
+humanFlowColormapUniform[0, 0, :] = 255
+#############################################################
 
-############################################################
+############################ half of red #################################
+humanFlowColormapHalfRed = np.zeros((256, 1, 3), dtype=np.uint8)
+
+## Red
+humanFlowColormapHalfRed[:, 0, 2] = 255
+
+for pixel in range(128, 192):
+    ## Red
+    humanFlowColormapHalfRed[pixel, 0, 2] = 255
+
+    ## Green
+    humanFlowColormapHalfRed[pixel, 0, 1] = 4 * (pixel - 128)
+
+for pixel in range(192, 256):
+    ## Red
+    humanFlowColormapHalfRed[pixel, 0, 2] = 255 - 4 * (pixel - 192)
+
+    ## Green
+    humanFlowColormapHalfRed[pixel, 0, 1] = 255
+
+## Blue
+humanFlowColormapHalfRed[:, 0, 0] = 50
+
+humanFlowColormapHalfRed[0, 0, :] = 255
+#############################################################
+
+########################### 3/4 red #################################
 humanFlowColormap = np.zeros((256, 1, 3), dtype=np.uint8)
 
-for pixel in range(1, 128):
+## Red
+humanFlowColormap[:, 0, 2] = 255
+
+for pixel in range(192, 224):
     ## Red
     humanFlowColormap[pixel, 0, 2] = 255
-    
+
     ## Green
-    humanFlowColormap[pixel, 0, 1] = 2 * pixel
-    
-for pixel in range(128, 256):
+    humanFlowColormap[pixel, 0, 1] = 8 * (pixel - 192)
+
+for pixel in range(224, 256):
     ## Red
-    humanFlowColormap[pixel, 0, 2] = 255 - 2 * (pixel - 128)
-    
+    humanFlowColormap[pixel, 0, 2] = 255 - 8 * (pixel - 224)
+
     ## Green
     humanFlowColormap[pixel, 0, 1] = 255
-    
+
 ## Blue
-humanFlowColormap[:, 0, 0] = 0
+humanFlowColormap[:, 0, 0] = 50
 
 humanFlowColormap[0, 0, :] = 255
 ############################################################
 
-def reformatColormap(colormap):
-    colormapImage = np.zeros((256, 500, 3), dtype=np.uint8)
-    for column in range(0, 500):
-        colormapImage[:, column, :] = colormap[:, 0, :]
-
-    return colormapImage
-    
-def displayColormap(colormap):
-    colormapImage = reformatColormap(colormap)
-    cv2.imwrite('/Users/jordan/Documents/Jordan/personal-projects/formation-theodo/results/displayed-image.png', colormapImage)
-    image = cv2.imread('/Users/jordan/Documents/Jordan/personal-projects/formation-theodo/results/displayed-image.png')
-    cv2.imshow('image', image)
-    if cv2.waitKey(5) & 0xFF == ord('q'):
-        cv2.destroyAllWindows()
-
-displayColormap(humanFlowColormap)
+if __name__ == "__main__":
+    displayColormap(humanFlowColormap)
