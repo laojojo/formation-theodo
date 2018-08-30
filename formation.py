@@ -16,7 +16,6 @@ if __name__ == "__main__":
     fgbg = cv2.createBackgroundSubtractorMOG2(history=200, varThreshold=128, detectShadows=False)
     alpha = 0.3
     maskTrace = 0
-    isFirstIteration = True
     imageCount = 0
 
     while(video.isOpened()):
@@ -25,13 +24,9 @@ if __name__ == "__main__":
         if ret == True:
             mask = fgbg.apply(frame, None, 0.01)
 
-            if isFirstIteration:
-                isFirstIteration = False
-                continue
-
             maskTrace = maskTrace + mask
-            reformatedMaskTrace = maskToMaskImage(maskTrace)
 
+            reformatedMaskTrace = maskToMaskImage(maskTrace)
             heat = applyCustomColorMap(reformatedMaskTrace, humanFlowColormap)
             heatmap = frame.copy()
 
