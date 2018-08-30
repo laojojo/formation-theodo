@@ -114,7 +114,7 @@ for pixel in range(224, 256):
 ## Blue
 humanFlowColormap[:, 0, 0] = 50
 
-humanFlowColormap[0, 0, :] = 255
+humanFlowColormap[255, 0, :] = 255
 ############################################################
 
 if __name__ == "__main__":
