@@ -9,7 +9,6 @@ import cv2
 from utils_colormap import applyCustomColorMap
 from colormaps import humanFlowColormap
 
-
 if __name__ == "__main__":
     repositoryPath = '/Users/jordan/Documents/Jordan/personal-projects/formation-theodo/'
     video = cv2.VideoCapture(repositoryPath + 'opencv-sample-video.avi')
