@@ -9,10 +9,10 @@ Created on Fri Aug 10 17:14:25 2018
 import numpy as np
 import cv2
 
-def maskToMaskImage(image):
-    rowNumber = image.shape[0]
-    columnNumber = image.shape[1]
-    flattenImage = image.flatten()
+def maskToMaskImage(mask):
+    rowNumber = mask.shape[0]
+    columnNumber = mask.shape[1]
+    flattenImage = mask.flatten()
     coloredImage = np.array((flattenImage, flattenImage, flattenImage)).T
 
     return np.reshape(coloredImage, (rowNumber, columnNumber, 3))
@@ -32,7 +32,8 @@ def displayColormap(colormap):
     if (cv2.waitKey(5) & 0xFF == ord('q')):
         cv2.destroyAllWindows()
 
-def applyCustomColorMap(im_gray, humanFlowColormap):    
-    im_color = cv2.LUT(im_gray, humanFlowColormap)
+def applyCustomColorMap(grayScaleImage, humanFlowColormap):
+    reformatedGrayScaleImage = maskToMaskImage(grayScaleImage)
+    coloredImage = cv2.LUT(reformatedGrayScaleImage, humanFlowColormap)
 
-    return im_color;
+    return coloredImage;
