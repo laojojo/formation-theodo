@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Thu Jun 22 16:13:53 2017
-
-@author: jorlao
-"""
 
 import cv2
 from utils_colormap import applyCustomColorMap
@@ -11,7 +6,8 @@ from colormaps import humanFlowColormap
 
 if __name__ == "__main__":
     repositoryPath = '/Users/jordan/Documents/Jordan/personal-projects/formation-theodo/'
-    video = cv2.VideoCapture(repositoryPath + 'opencv-sample-video.avi')
+    videoName = 'opencv-sample-video.avi'
+    video = cv2.VideoCapture(repositoryPath + videoName)
     backgroundSubstractor = cv2.createBackgroundSubtractorMOG2(history=200, varThreshold=128, detectShadows=False)
     alpha = 0.3
     maskTrace = 0
@@ -45,7 +41,6 @@ if __name__ == "__main__":
             if (cv2.waitKey(5) & 0xFF == ord('q')):
                 video.release()
                 cv2.destroyAllWindows()
-                cv2.waitKey(1)
                 break
         else:
             break
