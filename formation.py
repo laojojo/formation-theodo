@@ -14,9 +14,9 @@ if __name__ == "__main__":
     imageCount = 0
 
     while(video.isOpened()):
-        ret, frame = video.read()
+        isFrame, frame = video.read()
 
-        if ret == True:
+        if (isFrame == True):
             mask = backgroundSubstractor.apply(frame, None, 0.01)
 
             maskTrace = maskTrace + mask
