@@ -11,7 +11,7 @@ if __name__ == "__main__":
     while(video.isOpened()):
         isFrame, frame = video.read()
 
-        if isFrame == True:
+        if (isFrame):
             cv2.imshow('video', frame)
 
             cv2.imwrite(repositoryPath + 'results/frame.png', frame)
