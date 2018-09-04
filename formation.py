@@ -38,7 +38,7 @@ if __name__ == "__main__":
 
             imageCount += 1
 
-            if (cv2.waitKey(5) & 0xFF == ord('q')):
+            if (cv2.waitKey(5) == ord('q')):
                 video.release()
                 cv2.destroyAllWindows()
                 break
