@@ -21,20 +21,20 @@ if __name__ == "__main__":
 
             maskTrace = maskTrace + mask
 
-            heat = applyCustomColorMap(maskTrace, humanFlowColormap)
-            heatmap = frame.copy()
+            heatMap = applyCustomColorMap(maskTrace, humanFlowColormap)
+            frameCopy = frame.copy()
 
-            cv2.addWeighted(heat, alpha, heatmap, 1 - alpha, 0, heatmap)
+            result = cv2.addWeighted(heatMap, alpha, frameCopy, 1 - alpha, 0)
 
-            cv2.imshow('heatmap', heatmap)
+            cv2.imshow('result', result)
 
             print('Image number:', imageCount)
 
             cv2.imwrite(repositoryPath + 'results/frame.png', frame)
             cv2.imwrite(repositoryPath + 'results/mask.png', mask)
             cv2.imwrite(repositoryPath + 'results/maskTrace.png', maskTrace)
-            cv2.imwrite(repositoryPath + 'results/heat.png', heat)
-            cv2.imwrite(repositoryPath + 'results/heatmap.png', heatmap)
+            cv2.imwrite(repositoryPath + 'results/heatMap.png', heatMap)
+            cv2.imwrite(repositoryPath + 'results/result.png', result)
 
             imageCount += 1
 
